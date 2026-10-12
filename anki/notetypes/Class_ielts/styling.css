@@ -1,0 +1,364 @@
+.bdy{font-family:Verdana,Microsoft Yahei;line-height:130%;}
+.ctn{font-family:Verdana,Microsoft Yahei;line-height:130%;}
+
+/* 简明释义的单词头 */
+.hwd{
+font-size:250%;font-weight:bold;color:Crimson;line-height:160%;text-align:center;}
+
+/* 上横线，下横线 */
+.hrz{height:1px;border-top:1px dotted Crimson;}
+.hr2{height:1px;border-top:1px dotted Crimson;display:none}
+
+/* 单词释义正文的 div 分组 */
+.git{text-align:center}
+
+/* 音标，这里要设置字体，上面 body 默认定义的 Verdana/雅黑 在 GoldenDict 里显示音标显示不全 */
+.ipa{text-align:center;font-size:140%;line-height:180%;color:Sienna;font-family:Tahoma, Verdana, "Lucida Sans Unicode", "Segoe UI", "Palatino Linotype", "Arial Unicode MS", sans-serif;}
+
+.tag{color:Purple;}
+.gde{;}
+.deb{;}
+
+.den{;}
+
+/* 简明释义的中文翻译区 */
+.gdc{padding-bottom:12px;}
+
+/* 每一行释义及词源的div */
+.dcb{font-size:140%;line-height:140%;margin-left:10px;}
+
+/* 词性，adj. / v. / adv. 等 */
+.pos{font-family:Georgia;font-style:italic;font-weight:bold;color:Navy;}
+
+/* 释义非词性正文 span */
+.dcn {font-family:Microsoft Yahei;font-size:90%;color:black;
+}
+
+/* 释义 [网络] 前缀，如 a cup of tea 包含网络释义 */
+.dnt{font-family:Microsoft Yahei;font-size:90%;color:gray;}
+
+/* 释义 [网络] 正文 */
+.dne{font-family:Microsoft Yahei;font-size:90%;color:gray;}
+
+/* 释义 例句 span，Urban Dictionary 部分导入词汇有例句，如 Yoga Pants */
+.deq{font-family:Microsoft Yahei;font-size:90%;color:gray;}
+
+/* 词根标题 */
+.page-header {font-family: Microsoft Yahei,helvetica, arial, sans-serif;
+font-size: 16px;line-height:100%;padding:1px;color:#AAAAAA }
+
+/* 词根正文 */
+.row{font-size: 16px;line-height:140%;padding:0px 0px 20px 0px;margin-right:10px;}
+
+/* 例句 */
+#back{
+  font-size: 18px;
+  text-align: left;
+  line-height : 1.5em; /*段落行高-1.5em*/
+}
+
+.card {
+  font-family: Microsoft Yahei,helvetica, arial, sans-serif;
+  text-align: left;
+}
+
+.head{
+  border-radius: 2px;
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.16),0 0px 0px 1px rgba(0, 0, 0, 0.06);
+  padding: 8px 12px 8px;
+}
+
+.section {
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.16),0 0px 0px 1px rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+  margin: 8px 0 8px 0;
+}
+
+.items{
+  margin: 0 12px;
+  padding: 10px 0 8px 0;
+}
+
+/* 分割线使用 */
+hr{
+  border: 0;
+  margin: 0 12px;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Front主单词使用 */
+#front{
+  font-size: 37px;
+  text-align: center;
+}
+
+/* Front音标使用 */
+#pt{
+  font-size  : 28px;
+  text-align : center;
+  font-family: Calibri;
+}
+
+html.mobile, body.mobile {  
+    height: 100%;
+}
+
+.card {
+    font-family: "Microsoft YaHei", Helvetica, sans-serif;
+    color: #1d2129;
+    background-color: #e9ebee;
+}
+
+.row-fluid {
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    background-color: #fff;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 8px;
+}
+
+.cell {
+    padding: 10px 10px 10px 10px;
+}
+
+.hint {
+    display: block;
+    line-height: 20px;
+    color: #999999;
+    margin-right: 10px;
+    /*margin-left: 10px;*/
+    margin-top: 10px;
+}
+
+blockquote {
+padding: 10px 0 10px 15px;
+    margin: 0 5px 10px;
+    background: #f9f9f9;
+    border-left: 5px solid black;
+    /*margin: 1.5em 10px;*/
+    /*padding: 0.5em 10px;*/
+}
+
+.slidetop {
+    position: relative;
+    -webkit-animation: slidetop 0.5s 0s;
+    -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes slidetop {
+    0% {
+        opacity: 0;
+        top: 50px;
+    }
+    50% {
+        opacity: 0.8;
+        top: -5px;
+    }
+    80% {
+        opacity: 0.95;
+        top: 0px;
+    }
+    100% {
+        opacity: 1;
+        top: 0px;
+    }
+}
+
+.prompt-definition .hwd,
+.prompt-definition .git,
+.prompt-definition .gfm,
+.prompt-definition .hrz,
+.prompt-definition .hr2 {
+    display: none !important;
+}
+.prompt-definition .gdc {
+    padding-bottom: 0;
+}
+.retry-target {
+    color: #c62828;
+    font-weight: 700;
+}
+.answer-meta {
+    margin-top: 8px;
+    color: #555;
+}
+
+/* codex-anki-darkmode-v1 */
+:root {
+    color-scheme: light dark;
+}
+
+/* Anki desktop uses .nightMode; AnkiDroid may use .night_mode. */
+html.nightMode,
+body.nightMode,
+.nightMode,
+html.night_mode,
+body.night_mode,
+.night_mode {
+    color: #f3f4f6 !important;
+    background-color: #17191c !important;
+}
+
+.nightMode .row-fluid,
+.night_mode .row-fluid {
+    color: #f3f4f6 !important;
+    background-color: #24272b !important;
+    border-color: #3e434a !important;
+}
+
+.nightMode blockquote,
+.night_mode blockquote {
+    color: #f3f4f6 !important;
+    background-color: #1d2024 !important;
+    border-left-color: #8ab4f8 !important;
+}
+
+.nightMode .prompt-definition,
+.nightMode .prompt-definition *,
+.nightMode .collins,
+.nightMode .collins *,
+.nightMode .dcn,
+.nightMode .dnt,
+.nightMode .dne,
+.nightMode .deq,
+.night_mode .prompt-definition,
+.night_mode .prompt-definition *,
+.night_mode .collins,
+.night_mode .collins *,
+.night_mode .dcn,
+.night_mode .dnt,
+.night_mode .dne,
+.night_mode .deq {
+    color: #f3f4f6 !important;
+}
+
+/* Keep the answer visually distinct; the retry script detects this contrast. */
+.nightMode #answer-content .retry-target,
+.night_mode #answer-content .retry-target {
+    color: #ff9b96 !important;
+}
+
+.nightMode .pos,
+.night_mode .pos {
+    color: #9ec5ff !important;
+}
+
+.nightMode .ipa,
+.night_mode .ipa {
+    color: #f0c987 !important;
+}
+
+.nightMode .tag,
+.night_mode .tag {
+    color: #d8a7ff !important;
+}
+
+.nightMode .answer-meta,
+.nightMode .hint,
+.night_mode .answer-meta,
+.night_mode .hint {
+    color: #c4c8ce !important;
+}
+
+.nightMode #retry-input,
+.night_mode #retry-input {
+    color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    background-color: #111315 !important;
+    border-color: #737b86 !important;
+}
+
+.nightMode #retry-input:focus,
+.night_mode #retry-input:focus {
+    border-color: #8ab4f8 !important;
+}
+
+.nightMode #start-retry-btn,
+.night_mode #start-retry-btn {
+    color: #ffffff !important;
+    background-color: #286fc5 !important;
+}
+
+.nightMode #result-message,
+.night_mode #result-message {
+    border: 1px solid currentColor;
+}
+
+/* codex-typing-feedback-v1 */
+#initial-typing-feedback {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #d8dadd;
+}
+
+.typing-feedback-label {
+    margin-bottom: 7px;
+    color: #555b63;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#initial-typing-feedback #typeans {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 7px;
+    color: #1d2129;
+    background: #f5f6f7;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 22px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+#initial-typing-feedback .typeGood {
+    color: #146c43 !important;
+    background-color: #dff3e8 !important;
+}
+
+#initial-typing-feedback .typeBad {
+    color: #a61b29 !important;
+    background-color: #fde2e5 !important;
+}
+
+#initial-typing-feedback .typeMissed {
+    color: #725400 !important;
+    background-color: #fff0bd !important;
+}
+
+.nightMode #initial-typing-feedback,
+.night_mode #initial-typing-feedback {
+    border-top-color: #464b52;
+}
+
+.nightMode .typing-feedback-label,
+.night_mode .typing-feedback-label {
+    color: #c4c8ce !important;
+}
+
+.nightMode #initial-typing-feedback #typeans,
+.night_mode #initial-typing-feedback #typeans {
+    color: #f3f4f6 !important;
+    background: #17191c !important;
+}
+
+.nightMode #initial-typing-feedback .typeGood,
+.night_mode #initial-typing-feedback .typeGood {
+    color: #b8f2d2 !important;
+    background-color: #174b36 !important;
+}
+
+.nightMode #initial-typing-feedback .typeBad,
+.night_mode #initial-typing-feedback .typeBad {
+    color: #ffc1c7 !important;
+    background-color: #64252d !important;
+}
+
+.nightMode #initial-typing-feedback .typeMissed,
+.night_mode #initial-typing-feedback .typeMissed {
+    color: #ffe29a !important;
+    background-color: #594512 !important;
+}

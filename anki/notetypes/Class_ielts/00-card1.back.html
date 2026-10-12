@@ -1,0 +1,794 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="_youdao.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 0;
+            padding-bottom: 40px;
+            font-family: sans-serif;
+            color: #1d2129;
+            background-color: #e9ebee;
+        }
+
+        #answer-area {
+            display: block;
+        }
+
+        #start-retry-btn {
+            display: inline-block;
+            margin: 16px 5px 0;
+            padding: 10px 18px;
+
+            border: 0;
+            border-radius: 7px;
+            outline: none;
+            cursor: pointer;
+
+            color: #ffffff;
+            background-color: #1677f0;
+
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #start-retry-btn:hover {
+            background-color: #0f65d8;
+        }
+
+        #start-retry-btn:active {
+            background-color: #0b55ba;
+        }
+
+        #retry-area {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #retry-input {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+
+            border: 2px solid #777777;
+            border-radius: 7px;
+            outline: none;
+
+            color: #1d2129;
+            background-color: #ffffff;
+
+            font-family: sans-serif;
+            font-size: 22px;
+        }
+
+        #retry-input:focus {
+            border-color: #1677f0;
+        }
+
+        #retry-message {
+            min-height: 25px;
+            margin: 9px 5px 0;
+            font-size: 16px;
+        }
+
+        #result-message {
+            display: none;
+            margin: 16px 5px 0;
+            padding: 11px 13px;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    
+.prompt-definition .hwd,
+.prompt-definition .git,
+.prompt-definition .gfm,
+.prompt-definition .hrz,
+.prompt-definition .hr2 {
+    display: none !important;
+}
+.prompt-definition .gdc {
+    padding-bottom: 0;
+}
+.retry-target {
+    color: #c62828;
+    font-weight: 700;
+}
+.answer-meta {
+    margin-top: 8px;
+    color: #555;
+}
+
+
+/* codex-anki-darkmode-v1 */
+:root {
+    color-scheme: light dark;
+}
+
+/* Anki desktop uses .nightMode; AnkiDroid may use .night_mode. */
+html.nightMode,
+body.nightMode,
+.nightMode,
+html.night_mode,
+body.night_mode,
+.night_mode {
+    color: #f3f4f6 !important;
+    background-color: #17191c !important;
+}
+
+.nightMode .row-fluid,
+.night_mode .row-fluid {
+    color: #f3f4f6 !important;
+    background-color: #24272b !important;
+    border-color: #3e434a !important;
+}
+
+.nightMode blockquote,
+.night_mode blockquote {
+    color: #f3f4f6 !important;
+    background-color: #1d2024 !important;
+    border-left-color: #8ab4f8 !important;
+}
+
+.nightMode .prompt-definition,
+.nightMode .prompt-definition *,
+.nightMode .collins,
+.nightMode .collins *,
+.nightMode .dcn,
+.nightMode .dnt,
+.nightMode .dne,
+.nightMode .deq,
+.night_mode .prompt-definition,
+.night_mode .prompt-definition *,
+.night_mode .collins,
+.night_mode .collins *,
+.night_mode .dcn,
+.night_mode .dnt,
+.night_mode .dne,
+.night_mode .deq {
+    color: #f3f4f6 !important;
+}
+
+/* Keep the answer visually distinct; the retry script detects this contrast. */
+.nightMode #answer-content .retry-target,
+.night_mode #answer-content .retry-target {
+    color: #ff9b96 !important;
+}
+
+.nightMode .pos,
+.night_mode .pos {
+    color: #9ec5ff !important;
+}
+
+.nightMode .ipa,
+.night_mode .ipa {
+    color: #f0c987 !important;
+}
+
+.nightMode .tag,
+.night_mode .tag {
+    color: #d8a7ff !important;
+}
+
+.nightMode .answer-meta,
+.nightMode .hint,
+.night_mode .answer-meta,
+.night_mode .hint {
+    color: #c4c8ce !important;
+}
+
+.nightMode #retry-input,
+.night_mode #retry-input {
+    color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    background-color: #111315 !important;
+    border-color: #737b86 !important;
+}
+
+.nightMode #retry-input:focus,
+.night_mode #retry-input:focus {
+    border-color: #8ab4f8 !important;
+}
+
+.nightMode #start-retry-btn,
+.night_mode #start-retry-btn {
+    color: #ffffff !important;
+    background-color: #286fc5 !important;
+}
+
+.nightMode #result-message,
+.night_mode #result-message {
+    border: 1px solid currentColor;
+}
+
+
+/* codex-two-column-v1 */
+#retry-card-root {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
+    gap: 12px 18px;
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    align-items: start;
+}
+
+#answer-area {
+    display: contents;
+}
+
+#answer {
+    display: none;
+}
+
+.prompt-panel {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.answer-primary {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.answer-meta {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0 6px;
+}
+
+#start-retry-btn {
+    grid-column: 1;
+    grid-row: 4;
+    justify-self: start;
+}
+
+.memory-panel {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.examples-panel {
+    grid-column: 2;
+    grid-row: 2 / span 3;
+}
+
+#retry-area {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    margin-top: 0;
+}
+
+#result-message {
+    grid-column: 1 / -1;
+}
+
+#retry-card-root .row-fluid {
+    margin-top: 0;
+}
+
+#retry-card-root h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+#retry-card-root .cell > br {
+    display: none;
+}
+
+/* Inline highlights from the imported dictionary need their own dark palette. */
+.nightMode .prompt-definition [style*="background-color"],
+.nightMode .collins [style*="background-color"],
+.night_mode .prompt-definition [style*="background-color"],
+.night_mode .collins [style*="background-color"] {
+    color: #ffe6a1 !important;
+    -webkit-text-fill-color: #ffe6a1 !important;
+    background-color: #514013 !important;
+    border-radius: 3px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 1px 4px;
+}
+
+@media (max-width: 850px) {
+    #retry-card-root {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .prompt-panel,
+    .answer-primary,
+    .answer-meta,
+    #start-retry-btn,
+    .memory-panel,
+    .examples-panel,
+    #retry-area,
+    #result-message {
+        grid-column: 1;
+    }
+
+    .prompt-panel { grid-row: 1; }
+    .answer-primary { grid-row: 2; }
+    .answer-meta { grid-row: 3; }
+    #start-retry-btn { grid-row: 4; }
+    .memory-panel { grid-row: 5; }
+    .examples-panel { grid-row: 6; }
+    #retry-area { grid-row: 2; }
+    #result-message { grid-row: 7; }
+}
+
+</style>
+</head>
+
+<!-- 当前反面的根节点 -->
+<div id="retry-card-root">
+
+    <!-- 中文内容始终显示 -->
+    {{#JianMin}}
+    <div class="container-fluid text-left prompt-panel">
+        <div class="row-fluid">
+            <div class="cell">
+
+                <h3 style="margin-left: 5px;">
+                    CN
+                </h3>
+
+                <br>
+
+                <blockquote>
+                    <div style="font-size: 15px;">
+                        <div class="prompt-definition">{{JianMin}}</div>
+                    </div>
+                </blockquote>
+
+            </div>
+        </div>
+    </div>
+    {{/JianMin}}
+
+    <hr id="answer">
+
+    <!-- 正式答案区域 -->
+    <div id="answer-area">
+
+        {{#Word}}
+        <div class="container-fluid text-left slidetop answer-primary">
+            <div class="row-fluid">
+                <div class="cell">
+
+                    <h3 style="margin-left: 5px;">
+                        单词
+                    </h3>
+
+                    <br>
+
+                    <!--
+                        程序会找出这里颜色和正文不同的部分，
+                        作为需要默写的内容。
+                    -->
+                    <div id="answer-content" class="collins">
+                        <span class="retry-target">{{Word}}</span>
+                    </div>
+
+
+                    <!-- codex-typing-feedback-v1 -->
+                    <div id="initial-typing-feedback">
+                        <div class="typing-feedback-label">首次拼写结果</div>
+                        {{type:Word}}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{/Word}}
+
+        {{#UK}}
+        <div class="answer-meta">{{UK}} {{Audio}}</div>
+        {{/UK}}
+
+        {{#WordRoot}}
+        <div class="container-fluid text-left slidetop memory-panel">
+            <div class="row-fluid"><div class="cell">
+                <h3 style="margin-left: 5px;">词根与记忆</h3>
+                <div class="collins">{{WordRoot}}</div>
+            </div></div>
+        </div>
+        {{/WordRoot}}
+
+        {{#LiJu}}
+        <div class="container-fluid text-left slidetop examples-panel">
+            <div class="row-fluid"><div class="cell">
+                <h3 style="margin-left: 5px;">例句</h3>
+                <div class="collins">{{LiJu}}</div>
+            </div></div>
+        </div>
+        {{/LiJu}}
+
+
+        <!-- 点击此按钮开始默写，不使用 Tab -->
+        <button id="start-retry-btn" type="button">
+            遮住答案，默写变色部分
+        </button>
+
+    </div>
+
+    <!-- 第二次默写区域 -->
+    <div id="retry-area">
+
+        <div style="margin: 0 0 9px 5px;">
+            请输入刚才颜色不同的部分，写完按 Enter：
+        </div>
+
+        <input
+            id="retry-input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+        >
+
+        <div id="retry-message"></div>
+
+    </div>
+
+    <!-- 最后结果提示 -->
+    <div id="result-message"></div>
+
+</div>
+
+<script>
+(function () {
+    var root = document.getElementById("retry-card-root");
+    var answerArea = document.getElementById("answer-area");
+    var answerContent = document.getElementById("answer-content");
+    var startButton = document.getElementById("start-retry-btn");
+
+    var retryArea = document.getElementById("retry-area");
+    var retryInput = document.getElementById("retry-input");
+    var retryMessage = document.getElementById("retry-message");
+    var resultMessage = document.getElementById("result-message");
+
+    /*
+     * 最多允许写错 3 次。
+     * 想改成 5 次就把 3 改成 5。
+     */
+    var maxAttempts = 3;
+    var wrongCount = 0;
+
+    /*
+     * answer：正在查看答案。
+     * typing：答案已隐藏，正在默写。
+     * finished：已写对，或错误次数用完。
+     */
+    var stage = "answer";
+
+    /*
+     * 需要默写的标准答案。
+     */
+    var expectedAnswer = "";
+
+    /*
+     * 删除上一张卡残留的键盘监听器。
+     */
+    if (window.ankiRetryKeyHandler) {
+        document.removeEventListener(
+            "keydown",
+            window.ankiRetryKeyHandler,
+            true
+        );
+    }
+
+    /*
+     * 把任意颜色解析成 RGB 数组。
+     * 借助浏览器计算，兼容所有颜色写法。
+     */
+    function parseColor(colorText) {
+        if (!colorText) {
+            return null;
+        }
+
+        var probe = document.createElement("span");
+        probe.style.display = "none";
+        probe.style.color = colorText;
+
+        document.body.appendChild(probe);
+
+        var computed =
+            window.getComputedStyle(probe).color;
+
+        document.body.removeChild(probe);
+
+        var match = computed.match(
+            /rgba?\((\d+),\s*(\d+),\s*(\d+)/
+        );
+
+        if (!match) {
+            return null;
+        }
+
+        return [
+            Number(match[1]),
+            Number(match[2]),
+            Number(match[3])
+        ];
+    }
+
+    /*
+     * 计算两个颜色的差异大小。
+     */
+    function colorDistance(a, b) {
+        if (!a || !b) {
+            return 0;
+        }
+
+        var dr = a[0] - b[0];
+        var dg = a[1] - b[1];
+        var db = a[2] - b[2];
+
+        return Math.sqrt(
+            dr * dr + dg * dg + db * db
+        );
+    }
+
+    /*
+     * 找出例句中颜色和正文默认颜色不同的部分。
+     *
+     * 思路：
+     * 1. 先取正文默认颜色作为基准；
+     * 2. 逐个文字节点比较颜色；
+     * 3. 差异明显的，认为是高亮部分。
+     */
+    function getColoredAnswer(container) {
+        if (!container) {
+            return "";
+        }
+
+        /*
+         * 基准颜色：容器本身的文字颜色。
+         */
+        var baseColor = parseColor(
+            window.getComputedStyle(container).color
+        );
+
+        var pieces = [];
+
+        var walker = document.createTreeWalker(
+            container,
+            4,
+            null
+        );
+
+        var textNode;
+
+        while ((textNode = walker.nextNode())) {
+            var text = textNode.nodeValue || "";
+
+            if (text.trim() === "") {
+                continue;
+            }
+
+            var parent = textNode.parentElement;
+
+            if (!parent) {
+                continue;
+            }
+
+            var thisColor = parseColor(
+                window.getComputedStyle(parent).color
+            );
+
+            /*
+             * 颜色差异超过阈值，就算高亮部分。
+             * 阈值 40 可以区分明显不同的颜色，
+             * 又不会被轻微的抗锯齿差异干扰。
+             */
+            if (
+                colorDistance(baseColor, thisColor) > 40
+            ) {
+                pieces.push(text.trim());
+            }
+        }
+
+        return pieces
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    /*
+     * 统一格式，比较时忽略：
+     * 大小写、标点、多余空格、换行。
+     */
+    function normalize(value) {
+        return String(value || "")
+            .toLowerCase()
+            .replace(/[’‘]/g, "'")
+            .replace(/[“”]/g, '"')
+            .replace(/[^a-z0-9\u00c0-\u024f\s]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    /*
+     * 显示最终结果。
+     */
+    function showResult(message, success) {
+        resultMessage.style.display = "block";
+        resultMessage.textContent = message;
+
+        if (success) {
+            resultMessage.style.color = "#198754";
+            resultMessage.style.backgroundColor = "#e6f6ea";
+        } else {
+            resultMessage.style.color = "#c62828";
+            resultMessage.style.backgroundColor = "#fde8e8";
+        }
+    }
+
+    /*
+     * 点击按钮后进入默写。
+     */
+    function startRetry() {
+        expectedAnswer = getColoredAnswer(answerContent);
+
+        if (normalize(expectedAnswer) === "") {
+            showResult(
+                "没有找到颜色不同的部分。" +
+                "请确认单词答案已正确显示。",
+                false
+            );
+            return;
+        }
+
+        stage = "typing";
+        wrongCount = 0;
+
+        answerArea.style.display = "none";
+        retryArea.style.display = "block";
+        resultMessage.style.display = "none";
+
+        retryInput.value = "";
+        retryMessage.textContent = "";
+
+        setTimeout(function () {
+            if (
+                root &&
+                root.isConnected &&
+                stage === "typing"
+            ) {
+                retryInput.focus();
+            }
+        }, 30);
+    }
+
+    /*
+     * 重新显示正式答案。
+     */
+    function revealAnswer(message, success) {
+        stage = "finished";
+
+        retryInput.blur();
+
+        retryArea.style.display = "none";
+        answerArea.style.display = "";
+
+        showResult(message, success);
+    }
+
+    /*
+     * 检查默写答案。
+     */
+    function checkRetry() {
+        var typed = normalize(retryInput.value);
+        var correct = normalize(expectedAnswer);
+
+        if (typed === "") {
+            retryMessage.textContent =
+                "请先输入变色部分";
+
+            retryMessage.style.color = "#c62828";
+            retryInput.focus();
+            return;
+        }
+
+        if (typed === correct) {
+            revealAnswer(
+                "✓ 输入正确，正式答案已重新显示。",
+                true
+            );
+            return;
+        }
+
+        wrongCount += 1;
+
+        if (wrongCount >= maxAttempts) {
+            revealAnswer(
+                "已连续写错 " +
+                maxAttempts +
+                " 次。正确答案是：" +
+                expectedAnswer,
+                false
+            );
+            return;
+        }
+
+        var remaining =
+            maxAttempts - wrongCount;
+
+        retryMessage.textContent =
+            "✗ 不对，请再试一次（还剩 " +
+            remaining +
+            " 次）";
+
+        retryMessage.style.color = "#c62828";
+
+        retryInput.focus();
+        retryInput.select();
+    }
+
+    /*
+     * 点击蓝色按钮开始默写。
+     */
+    startButton.addEventListener(
+        "click",
+        function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            startRetry();
+        }
+    );
+
+    /*
+     * 键盘处理：
+     *
+     * 只有正在默写时，Enter 才用于检查答案。
+     * 其他时候 Enter 完全交给 Anki 默认处理。
+     * 不接管 Tab。
+     */
+    window.ankiRetryKeyHandler = function (event) {
+        if (!root || !root.isConnected) {
+            document.removeEventListener(
+                "keydown",
+                window.ankiRetryKeyHandler,
+                true
+            );
+            return;
+        }
+
+        /* Shift+Enter starts the extra dictation from the answer view. */
+        if (
+            event.key === "Enter" &&
+            event.shiftKey &&
+            stage === "answer"
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            startRetry();
+            return;
+        }
+
+        /* Enter checks the answer only while the extra dictation is active. */
+        if (
+            event.key === "Enter" &&
+            stage === "typing"
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            checkRetry();
+        }
+    };
+
+    document.addEventListener(
+        "keydown",
+        window.ankiRetryKeyHandler,
+        true
+    );
+})();
+</script>

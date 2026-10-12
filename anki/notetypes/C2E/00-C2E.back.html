@@ -1,0 +1,526 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="_youdao.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 0;
+            padding-bottom: 40px;
+            font-family: sans-serif;
+            color: #1d2129;
+            background-color: #e9ebee;
+        }
+
+        #answer-area {
+            display: block;
+        }
+
+        #start-retry-btn {
+            display: inline-block;
+            margin: 16px 5px 0;
+            padding: 10px 18px;
+
+            border: 0;
+            border-radius: 7px;
+            outline: none;
+            cursor: pointer;
+
+            color: #ffffff;
+            background-color: #1677f0;
+
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #start-retry-btn:hover {
+            background-color: #0f65d8;
+        }
+
+        #start-retry-btn:active {
+            background-color: #0b55ba;
+        }
+
+        #retry-area {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #retry-input {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+
+            border: 2px solid #777777;
+            border-radius: 7px;
+            outline: none;
+
+            color: #1d2129;
+            background-color: #ffffff;
+
+            font-family: sans-serif;
+            font-size: 22px;
+        }
+
+        #retry-input:focus {
+            border-color: #1677f0;
+        }
+
+        #retry-message {
+            min-height: 25px;
+            margin: 9px 5px 0;
+            font-size: 16px;
+        }
+
+        #result-message {
+            display: none;
+            margin: 16px 5px 0;
+            padding: 11px 13px;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<!-- 当前反面的根节点 -->
+<div id="retry-card-root">
+
+    <!-- 中文内容始终显示 -->
+    {{#CN}}
+    <div class="container-fluid text-left">
+        <div class="row-fluid">
+            <div class="cell">
+
+                <h3 style="margin-left: 5px;">
+                    CN
+                </h3>
+
+                <br>
+
+                <blockquote>
+                    <div style="font-size: 15px;">
+                        {{CN}}
+                    </div>
+                </blockquote>
+
+            </div>
+        </div>
+    </div>
+    {{/CN}}
+
+    <hr id="answer">
+
+    <!-- 正式答案区域 -->
+    <div id="answer-area">
+
+        {{#EN}}
+        <div class="container-fluid text-left slidetop">
+            <div class="row-fluid">
+                <div class="cell">
+
+                    <h3 style="margin-left: 5px;">
+                        EN
+                    </h3>
+
+                    <br>
+
+                    <!--
+                        程序会找出这里颜色和正文不同的部分，
+                        作为需要默写的内容。
+                    -->
+                    <div id="answer-content" class="collins">
+                        {{EN}}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{/EN}}
+
+        {{#Note2}}
+        <div class="container-fluid text-left slidetop">
+            <div class="row-fluid">
+                <div class="cell">
+
+                    <span class="collins">
+                        {{Note2}}
+                    </span>
+
+                </div>
+            </div>
+        </div>
+        {{/Note2}}
+
+        <!-- 点击此按钮开始默写，不使用 Tab -->
+        <button id="start-retry-btn" type="button">
+            遮住答案，默写变色部分
+        </button>
+
+    </div>
+
+    <!-- 第二次默写区域 -->
+    <div id="retry-area">
+
+        <div style="margin: 0 0 9px 5px;">
+            请输入刚才颜色不同的部分，写完按 Enter：
+        </div>
+
+        <input
+            id="retry-input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+        >
+
+        <div id="retry-message"></div>
+
+    </div>
+
+    <!-- 最后结果提示 -->
+    <div id="result-message"></div>
+
+</div>
+
+<script>
+(function () {
+    var root = document.getElementById("retry-card-root");
+    var answerArea = document.getElementById("answer-area");
+    var answerContent = document.getElementById("answer-content");
+    var startButton = document.getElementById("start-retry-btn");
+
+    var retryArea = document.getElementById("retry-area");
+    var retryInput = document.getElementById("retry-input");
+    var retryMessage = document.getElementById("retry-message");
+    var resultMessage = document.getElementById("result-message");
+
+    /*
+     * 最多允许写错 3 次。
+     * 想改成 5 次就把 3 改成 5。
+     */
+    var maxAttempts = 3;
+    var wrongCount = 0;
+
+    /*
+     * answer：正在查看答案。
+     * typing：答案已隐藏，正在默写。
+     * finished：已写对，或错误次数用完。
+     */
+    var stage = "answer";
+
+    /*
+     * 需要默写的标准答案。
+     */
+    var expectedAnswer = "";
+
+    /*
+     * 删除上一张卡残留的键盘监听器。
+     */
+    if (window.ankiRetryKeyHandler) {
+        document.removeEventListener(
+            "keydown",
+            window.ankiRetryKeyHandler,
+            true
+        );
+    }
+
+    /*
+     * 把任意颜色解析成 RGB 数组。
+     * 借助浏览器计算，兼容所有颜色写法。
+     */
+    function parseColor(colorText) {
+        if (!colorText) {
+            return null;
+        }
+
+        var probe = document.createElement("span");
+        probe.style.display = "none";
+        probe.style.color = colorText;
+
+        document.body.appendChild(probe);
+
+        var computed =
+            window.getComputedStyle(probe).color;
+
+        document.body.removeChild(probe);
+
+        var match = computed.match(
+            /rgba?\((\d+),\s*(\d+),\s*(\d+)/
+        );
+
+        if (!match) {
+            return null;
+        }
+
+        return [
+            Number(match[1]),
+            Number(match[2]),
+            Number(match[3])
+        ];
+    }
+
+    /*
+     * 计算两个颜色的差异大小。
+     */
+    function colorDistance(a, b) {
+        if (!a || !b) {
+            return 0;
+        }
+
+        var dr = a[0] - b[0];
+        var dg = a[1] - b[1];
+        var db = a[2] - b[2];
+
+        return Math.sqrt(
+            dr * dr + dg * dg + db * db
+        );
+    }
+
+    /*
+     * 找出例句中颜色和正文默认颜色不同的部分。
+     *
+     * 思路：
+     * 1. 先取正文默认颜色作为基准；
+     * 2. 逐个文字节点比较颜色；
+     * 3. 差异明显的，认为是高亮部分。
+     */
+    function getColoredAnswer(container) {
+        if (!container) {
+            return "";
+        }
+
+        /*
+         * 基准颜色：容器本身的文字颜色。
+         */
+        var baseColor = parseColor(
+            window.getComputedStyle(container).color
+        );
+
+        var pieces = [];
+
+        var walker = document.createTreeWalker(
+            container,
+            4,
+            null
+        );
+
+        var textNode;
+
+        while ((textNode = walker.nextNode())) {
+            var text = textNode.nodeValue || "";
+
+            if (text.trim() === "") {
+                continue;
+            }
+
+            var parent = textNode.parentElement;
+
+            if (!parent) {
+                continue;
+            }
+
+            var thisColor = parseColor(
+                window.getComputedStyle(parent).color
+            );
+
+            /*
+             * 颜色差异超过阈值，就算高亮部分。
+             * 阈值 40 可以区分明显不同的颜色，
+             * 又不会被轻微的抗锯齿差异干扰。
+             */
+            if (
+                colorDistance(baseColor, thisColor) > 40
+            ) {
+                pieces.push(text.trim());
+            }
+        }
+
+        return pieces
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    /*
+     * 统一格式，比较时忽略：
+     * 大小写、标点、多余空格、换行。
+     */
+    function normalize(value) {
+        return String(value || "")
+            .toLowerCase()
+            .replace(/[’‘]/g, "'")
+            .replace(/[“”]/g, '"')
+            .replace(/[^a-z0-9\u00c0-\u024f\s]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    /*
+     * 显示最终结果。
+     */
+    function showResult(message, success) {
+        resultMessage.style.display = "block";
+        resultMessage.textContent = message;
+
+        if (success) {
+            resultMessage.style.color = "#198754";
+            resultMessage.style.backgroundColor = "#e6f6ea";
+        } else {
+            resultMessage.style.color = "#c62828";
+            resultMessage.style.backgroundColor = "#fde8e8";
+        }
+    }
+
+    /*
+     * 点击按钮后进入默写。
+     */
+    function startRetry() {
+        expectedAnswer = getColoredAnswer(answerContent);
+
+        if (normalize(expectedAnswer) === "") {
+            showResult(
+                "没有找到颜色不同的部分。" +
+                "请确认 EN 中有一段文字的颜色和正文不同。",
+                false
+            );
+            return;
+        }
+
+        stage = "typing";
+        wrongCount = 0;
+
+        answerArea.style.display = "none";
+        retryArea.style.display = "block";
+        resultMessage.style.display = "none";
+
+        retryInput.value = "";
+        retryMessage.textContent = "";
+
+        setTimeout(function () {
+            if (
+                root &&
+                root.isConnected &&
+                stage === "typing"
+            ) {
+                retryInput.focus();
+            }
+        }, 30);
+    }
+
+    /*
+     * 重新显示正式答案。
+     */
+    function revealAnswer(message, success) {
+        stage = "finished";
+
+        retryInput.blur();
+
+        retryArea.style.display = "none";
+        answerArea.style.display = "block";
+
+        showResult(message, success);
+    }
+
+    /*
+     * 检查默写答案。
+     */
+    function checkRetry() {
+        var typed = normalize(retryInput.value);
+        var correct = normalize(expectedAnswer);
+
+        if (typed === "") {
+            retryMessage.textContent =
+                "请先输入变色部分";
+
+            retryMessage.style.color = "#c62828";
+            retryInput.focus();
+            return;
+        }
+
+        if (typed === correct) {
+            revealAnswer(
+                "✓ 输入正确，正式答案已重新显示。",
+                true
+            );
+            return;
+        }
+
+        wrongCount += 1;
+
+        if (wrongCount >= maxAttempts) {
+            revealAnswer(
+                "已连续写错 " +
+                maxAttempts +
+                " 次。正确答案是：" +
+                expectedAnswer,
+                false
+            );
+            return;
+        }
+
+        var remaining =
+            maxAttempts - wrongCount;
+
+        retryMessage.textContent =
+            "✗ 不对，请再试一次（还剩 " +
+            remaining +
+            " 次）";
+
+        retryMessage.style.color = "#c62828";
+
+        retryInput.focus();
+        retryInput.select();
+    }
+
+    /*
+     * 点击蓝色按钮开始默写。
+     */
+    startButton.addEventListener(
+        "click",
+        function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            startRetry();
+        }
+    );
+
+    /*
+     * 键盘处理：
+     *
+     * 只有正在默写时，Enter 才用于检查答案。
+     * 其他时候 Enter 完全交给 Anki 默认处理。
+     * 不接管 Tab。
+     */
+    window.ankiRetryKeyHandler = function (event) {
+        if (!root || !root.isConnected) {
+            document.removeEventListener(
+                "keydown",
+                window.ankiRetryKeyHandler,
+                true
+            );
+            return;
+        }
+
+        if (
+            event.key === "Enter" &&
+            stage === "typing"
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            checkRetry();
+        }
+    };
+
+    document.addEventListener(
+        "keydown",
+        window.ankiRetryKeyHandler,
+        true
+    );
+})();
+</script>

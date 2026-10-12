@@ -1,0 +1,69 @@
+<style>
+html.mobile, body.mobile {  
+    height: 100%;
+}
+
+.card {
+    font-family: "Microsoft YaHei", Helvetica, sans-serif;
+    color: #1d2129;
+    background-color: #e9ebee;
+}
+
+.row-fluid {
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    background-color: #fff;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 8px;
+}
+
+.cell {
+    padding: 10px 10px 10px 10px;
+}
+
+.hint {
+    display: block;
+    line-height: 20px;
+    color: #999999;
+    margin-right: 10px;
+    /*margin-left: 10px;*/
+    margin-top: 10px;
+}
+
+blockquote {
+padding: 10px 0 10px 15px;
+    margin: 0 5px 10px;
+    background: #f9f9f9;
+    border-left: 5px solid black;
+    /*margin: 1.5em 10px;*/
+    /*padding: 0.5em 10px;*/
+}
+
+.slidetop {
+    position: relative;
+    -webkit-animation: slidetop 0.5s 0s;
+    -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes slidetop {
+    0% {
+        opacity: 0;
+        top: 50px;
+    }
+    50% {
+        opacity: 0.8;
+        top: -5px;
+    }
+    80% {
+        opacity: 0.95;
+        top: 0px;
+    }
+    100% {
+        opacity: 1;
+        top: 0px;
+    }
+}
+
+<style>

@@ -1,0 +1,156 @@
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            padding-top: 0px;
+            font-family: sans-serif;
+            color: #1d2129;
+            background-color: #e9ebee;
+            padding-bottom: 40px;
+        }
+    
+.prompt-definition .hwd,
+.prompt-definition .git,
+.prompt-definition .gfm,
+.prompt-definition .hrz,
+.prompt-definition .hr2 {
+    display: none !important;
+}
+.prompt-definition .gdc {
+    padding-bottom: 0;
+}
+.retry-target {
+    color: #c62828;
+    font-weight: 700;
+}
+.answer-meta {
+    margin-top: 8px;
+    color: #555;
+}
+
+
+/* codex-anki-darkmode-v1 */
+:root {
+    color-scheme: light dark;
+}
+
+/* Anki desktop uses .nightMode; AnkiDroid may use .night_mode. */
+html.nightMode,
+body.nightMode,
+.nightMode,
+html.night_mode,
+body.night_mode,
+.night_mode {
+    color: #f3f4f6 !important;
+    background-color: #17191c !important;
+}
+
+.nightMode .row-fluid,
+.night_mode .row-fluid {
+    color: #f3f4f6 !important;
+    background-color: #24272b !important;
+    border-color: #3e434a !important;
+}
+
+.nightMode blockquote,
+.night_mode blockquote {
+    color: #f3f4f6 !important;
+    background-color: #1d2024 !important;
+    border-left-color: #8ab4f8 !important;
+}
+
+.nightMode .prompt-definition,
+.nightMode .prompt-definition *,
+.nightMode .collins,
+.nightMode .collins *,
+.nightMode .dcn,
+.nightMode .dnt,
+.nightMode .dne,
+.nightMode .deq,
+.night_mode .prompt-definition,
+.night_mode .prompt-definition *,
+.night_mode .collins,
+.night_mode .collins *,
+.night_mode .dcn,
+.night_mode .dnt,
+.night_mode .dne,
+.night_mode .deq {
+    color: #f3f4f6 !important;
+}
+
+/* Keep the answer visually distinct; the retry script detects this contrast. */
+.nightMode #answer-content .retry-target,
+.night_mode #answer-content .retry-target {
+    color: #ff9b96 !important;
+}
+
+.nightMode .pos,
+.night_mode .pos {
+    color: #9ec5ff !important;
+}
+
+.nightMode .ipa,
+.night_mode .ipa {
+    color: #f0c987 !important;
+}
+
+.nightMode .tag,
+.night_mode .tag {
+    color: #d8a7ff !important;
+}
+
+.nightMode .answer-meta,
+.nightMode .hint,
+.night_mode .answer-meta,
+.night_mode .hint {
+    color: #c4c8ce !important;
+}
+
+.nightMode #retry-input,
+.night_mode #retry-input {
+    color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    background-color: #111315 !important;
+    border-color: #737b86 !important;
+}
+
+.nightMode #retry-input:focus,
+.night_mode #retry-input:focus {
+    border-color: #8ab4f8 !important;
+}
+
+.nightMode #start-retry-btn,
+.night_mode #start-retry-btn {
+    color: #ffffff !important;
+    background-color: #286fc5 !important;
+}
+
+.nightMode #result-message,
+.night_mode #result-message {
+    border: 1px solid currentColor;
+}
+
+</style>
+
+    <link href="_youdao.css" rel="stylesheet">
+</head>
+
+
+  
+{{#JianMin}}
+<div class="container-fluid text-left">
+    <div class=row-fluid>
+        <div class=cell>
+            <h3 style="margin-left: 5px">中文释义</h3>
+            <br>
+            <blockquote>
+                <div style="font-size:15px">
+                    <div class="prompt-definition">{{JianMin}}</div>
+                </div>
+        </div>
+        </blockquote>
+    </div>
+</div>
+{{/JianMin}}
+
+{{type:Word}}
